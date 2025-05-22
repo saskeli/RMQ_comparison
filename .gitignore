@@ -30,3 +30,12 @@
 *.exe
 *.out
 *.app
+bench
+
+# Results related
+*.ssv
+*.ipynb
+.ipynb_checkpoints
+
+# env
+.vscode
