@@ -31,11 +31,13 @@
 *.out
 *.app
 bench
+test/test
 
 # Results related
 *.ssv
 *.ipynb
 .ipynb_checkpoints
+*.png
 
 # env
 .vscode

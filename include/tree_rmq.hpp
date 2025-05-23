@@ -3,6 +3,7 @@
 #include <stddef.h>
 
 #include <cstdint>
+#include <string>
 #include <vector>
 
 class Tree_RMQ {
@@ -30,25 +31,37 @@ class Tree_RMQ {
 
     ~node() {
       if (left != nullptr) {
-        left->~node();
         delete (left);
-        right->~node();
         delete (right);
       }
     }
 
+    bool has_left() const { return left != nullptr; }
+
+    bool has_right() const { return left != nullptr; }
+
     uint64_t minimum(size_t a, size_t b) const {
-      if (a == 0 && b == size) {
+      //std::cerr << "node " << value << ", " << size << " min " << a << ", " << b << std::endl;
+      if (left == nullptr) {
+        //std::cerr << " -> " << value << std::endl;
+        return value;
+      }
+      if (a == 0 && b == size - 1) {
+        //std::cerr << " -> " << value << std::endl;
         return value;
       }
       size_t left_s = left->size;
-      if (b < left_s) {
-        return left->minimum(a, b);
+      if (a < left_s) {
+        if (b < left_s) {
+          //std::cerr << " -> left" << std::endl;
+          return left->minimum(a, b);
+        }
+        //std::cerr << " -> both" << std::endl;
+        return std::min(left->minimum(a, left_s - 1),
+                        right->minimum(0, b - left_s));
       }
-      if (a >= left_s) {
-        return right->minimum(a - left_s, b - left_s);
-      }
-      return std::min(left->minimum(a, left_s), right->minimum(0, b - left_s));
+      //std::cerr << " -> right" << std::endl;
+      return right->minimum(a - left_s, b - left_s);
     }
 
     void set(size_t i, uint64_t v) {
@@ -57,8 +70,35 @@ class Tree_RMQ {
         return;
       }
       size_t left_s = left->size;
-      if (left->size) {
+      if (left_s > i) {
+        left->set(i, v);
+      } else {
+        right->set(i - left_s, v);
+      }
+      value = std::min(left->value, right->value);
+    }
 
+    void to_string(std::string& ret, std::string& indent) const {
+      ret.append(indent)
+          .append(std::to_string(value))
+          .append(", ")
+          .append(std::to_string(size))
+          .append(", ")
+          .append(std::to_string(reinterpret_cast<uint64_t>((left))))
+          .append(", ")
+          .append(std::to_string(reinterpret_cast<uint64_t>((right))))
+          .push_back('\n');
+      if (left != nullptr) {
+        indent.append("l ");
+        left->to_string(ret, indent);
+        indent.pop_back();
+        indent.pop_back();
+      }
+      if (right != nullptr) {
+        indent.append("r ");
+        right->to_string(ret, indent);
+        indent.pop_back();
+        indent.pop_back();
       }
     }
   };
@@ -70,12 +110,23 @@ class Tree_RMQ {
 
   ~Tree_RMQ() {
     if (root != nullptr) {
-      root->~node();
       delete (root);
     }
   }
 
-  uint64_t minimum(size_t a, size_t b) const { return root->minimum(a, b); }
+  uint64_t minimum(size_t a, size_t b) const {
+    //std::cerr << "minimum " << a << ", " << b << std::endl;
+    return root->minimum(a, b);
+  }
 
   void set(size_t i, uint64_t v) { root->set(i, v); }
+
+  std::string to_string() const {
+    std::string ret = "tree:\n";
+    std::string indent = "";
+    if (root != nullptr) {
+      root->to_string(ret, indent);
+    }
+    return ret;
+  }
 };
