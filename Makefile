@@ -11,7 +11,10 @@ GFLAGS = -lpthread -DGTEST_ON -isystem googletest/googletest/include -pthread -L
 DEFAULT: bench
 
 bench: bench.cpp $(HEADERS) benchmark/build/lib/libgtest.a
-	g++ $(CFLAGS) -Ofast bench.cpp -std=c++11 $(BENCH) -o bench
+	g++ $(CFLAGS) -Ofast bench.cpp $(BENCH) -o bench
+
+profile: profile.cpp $(HEADERS) counters/counters.hpp
+	g++ $(CFLAGS) -Ofast profile.cpp -o profile 
 
 benchmark/build/lib:
 	git submodule update --init
@@ -33,5 +36,5 @@ test/test: googletest/build/lib/libgtest_main.a test/test.cpp $(HEADERS)
 test: test/test
 	test/test $(ARG)
 
-run: run.cpp $(HEADERS)
-	g++ $(CFLAGS) -g -DDEBUG run.cpp -o run
+counters/counters.hpp: 
+	git submodule update --init
