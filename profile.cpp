@@ -52,9 +52,9 @@ int main(int argc, char const *argv[]) {
   std::cout << "Checksums " << a_c << ", " << b_c << std::endl;
   
   std::cout << "\nSegment tree RMQ:" << std::endl;
-  counter.output_counters(0, runs);
+  counter.output_counters(0, runs * n);
 
   std::cout << "\nPointer-based tree RMQ:" << std::endl;
-  counter.output_counters(1, runs);
+  counter.output_counters(1, runs * n);
   return 0;
 }

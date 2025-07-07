@@ -16,6 +16,9 @@ bench: bench.cpp $(HEADERS) benchmark/build/lib/libgtest.a
 profile: profile.cpp $(HEADERS) counters/counters.hpp
 	g++ $(CFLAGS) -Ofast profile.cpp -o profile 
 
+scale: scale.cpp $(HEADERS) counters/counters.hpp
+	g++ $(CFLAGS) -Ofast scale.cpp -o scale 
+
 benchmark/build/lib:
 	git submodule update --init
 

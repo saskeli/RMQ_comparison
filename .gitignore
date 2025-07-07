@@ -33,12 +33,14 @@
 bench
 test/test
 profile
+scale
 
 # Results related
 *.ssv
 *.ipynb
 .ipynb_checkpoints
 *.png
+*.txt
 
 # env
 .vscode
