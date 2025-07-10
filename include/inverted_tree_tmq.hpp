@@ -79,9 +79,16 @@ class Inv_Tree_RMQ {
         return min;
       }
       min = std::min(min, a_ptr->value);
-      a_ptr = a_ptr->is_left ? a_ptr->parent : a_ptr->parent->right_sibling;
+      bool is_left = a_ptr->is_left;
+      a_ptr = reinterpret_cast<node*>(
+          reinterpret_cast<uint64_t>(a_ptr->parent) * is_left +
+          reinterpret_cast<uint64_t>(a_ptr->parent->right_sibling) *
+              (!is_left));
       min = std::min(min, b_ptr->value);
-      b_ptr = b_ptr->is_left ? b_ptr->parent->left_sibling : b_ptr->parent;
+      is_left = b_ptr->is_left;
+      b_ptr = reinterpret_cast<node*>(
+          reinterpret_cast<uint64_t>(b_ptr->parent->left_sibling) * is_left +
+          reinterpret_cast<uint64_t>(b_ptr->parent) * (!is_left));
     }
     return std::min(min, a_ptr->value);
   }
