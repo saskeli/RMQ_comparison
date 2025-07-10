@@ -5,6 +5,7 @@
 #include "../googletest/googletest/include/gtest/gtest.h"
 #include "../include/seg_rmq.hpp"
 #include "../include/tree_rmq.hpp"
+#include "../include/inverted_tree_tmq.hpp"
 #include "../include/util.hpp"
 
 uint64_t bf(std::vector<uint64_t>& vec, size_t a, size_t b) {
@@ -15,11 +16,12 @@ uint64_t bf(std::vector<uint64_t>& vec, size_t a, size_t b) {
   return ret;
 }
 
-void validate(std::vector<uint64_t>& vec, Seq_RMQ& s_rmq, Tree_RMQ& t_rmq) {
+void validate(std::vector<uint64_t>& vec, Seq_RMQ& s_rmq, Tree_RMQ& t_rmq, Inv_Tree_RMQ& i_rmq) {
   for (size_t a = 0; a < vec.size(); ++a) {
     for (size_t b = a; b < vec.size(); ++b) {
       ASSERT_EQ(bf(vec, a, b), s_rmq.minimum(a, b)) << a << ", " << b;
       ASSERT_EQ(bf(vec, a, b), t_rmq.minimum(a, b)) << a << ", " << b;
+      ASSERT_EQ(bf(vec, a, b), i_rmq.minimum(a, b)) << a << ", " << b;
     }
   }
 }
@@ -33,8 +35,9 @@ void run_test(size_t size, size_t modifications, uint64_t s_lim, uint64_t seed_a
   }
   Seq_RMQ s_rmq(vec);
   Tree_RMQ t_rmq(vec);
+  Inv_Tree_RMQ i_rmq(vec);
   //std::cerr << t_rmq.to_string() << std::endl;
-  validate(vec, s_rmq, t_rmq);
+  validate(vec, s_rmq, t_rmq, i_rmq);
   std::vector<uint64_t> mod(modifications * 2);
   populate_random(mod, seed_b);
   for (size_t i = 0; i < mod.size(); i += 2) {
@@ -43,7 +46,8 @@ void run_test(size_t size, size_t modifications, uint64_t s_lim, uint64_t seed_a
     vec[loc] = v;
     s_rmq.set(loc, v);
     t_rmq.set(loc, v);
-    validate(vec, s_rmq, t_rmq);
+    i_rmq.set(loc, v);
+    validate(vec, s_rmq, t_rmq, i_rmq);
   }
 }
 
@@ -67,6 +71,23 @@ TEST(SegRMQ, test) {
 TEST(TreeRMQ, test) {
   std::vector<uint64_t> vec = {1, 5, 2, 6, 5};
   Tree_RMQ rmq(vec);
+  for (size_t a = 0; a < vec.size(); ++a) {
+    for (size_t b = a; b < vec.size(); ++b) {
+      ASSERT_EQ(bf(vec, a, b), rmq.minimum(a, b)) << a << ", " << b;
+    }
+  }
+  rmq.set(2, 4);
+  vec[2] = 4;
+  for (size_t a = 0; a < vec.size(); ++a) {
+    for (size_t b = a; b < vec.size(); ++b) {
+      ASSERT_EQ(bf(vec, a, b), rmq.minimum(a, b)) << a << ", " << b;
+    }
+  }
+}
+
+TEST(InvTreeRMQ, test) {
+  std::vector<uint64_t> vec = {1, 5, 2, 6, 5};
+  Inv_Tree_RMQ rmq(vec);
   for (size_t a = 0; a < vec.size(); ++a) {
     for (size_t b = a; b < vec.size(); ++b) {
       ASSERT_EQ(bf(vec, a, b), rmq.minimum(a, b)) << a << ", " << b;

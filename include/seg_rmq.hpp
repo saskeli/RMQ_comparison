@@ -30,8 +30,10 @@ class Seq_RMQ {
     a += tree_size_;
     b += tree_size_;
     while (a <= b) {
-      if (a % 2 == 1) min = std::min(min, tree_[a++]);
-      if (b % 2 == 0) min = std::min(min, tree_[b--]);
+      min = std::min(min, tree_[a]);
+      min = std::min(min, tree_[b]);
+      a += a % 2;
+      b -= not bool(b % 2);
       a /= 2;
       b /= 2;
     }

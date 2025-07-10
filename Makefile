@@ -2,7 +2,7 @@
 BENCH=-isystem benchmark/include -Lbenchmark/build/src -lbenchmark -lpthread
 CMAKE_OPT=-DBENCHMARK_DOWNLOAD_DEPENDENCIES=on -DCMAKE_BUILD_TYPE=Release
 
-HEADERS=include/seg_rmq.hpp include/tree_rmq.hpp include/util.hpp
+HEADERS=include/seg_rmq.hpp include/tree_rmq.hpp include/inverted_tree_tmq.hpp include/util.hpp
 
 CFLAGS=-std=c++23 -Wall -Wextra -Wshadow -pedantic -march=native
 

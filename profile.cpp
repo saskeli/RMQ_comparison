@@ -6,6 +6,7 @@
 #include "counters/counters.hpp"
 #include "include/seg_rmq.hpp"
 #include "include/tree_rmq.hpp"
+#include "include/inverted_tree_tmq.hpp"
 #include "include/util.hpp"
 
 const size_t runs = 100;
@@ -45,16 +46,20 @@ int main(int argc, char const *argv[]) {
   size_t n = std::stoull(argv[1]);
   size_t seed = std::stoull(argv[2]);
 
-  count::Default<2> counter;
+  count::Default<3> counter;
 
-  uint64_t a_c = run<Seq_RMQ, count::Default<2>, 0>(n,  seed, counter);
-  uint64_t b_c = run<Tree_RMQ, count::Default<2>, 1>(n,  seed, counter);
-  std::cout << "Checksums " << a_c << ", " << b_c << std::endl;
+  uint64_t a_c = run<Seq_RMQ, count::Default<3>, 0>(n, seed, counter);
+  uint64_t b_c = run<Tree_RMQ, count::Default<3>, 1>(n, seed, counter);
+  uint64_t c_c = run<Inv_Tree_RMQ, count::Default<3>, 2>(n, seed, counter);
+  std::cout << "Checksums " << a_c << ", " << b_c << ", " << c_c << std::endl;
   
   std::cout << "\nSegment tree RMQ:" << std::endl;
   counter.output_counters(0, runs * n);
 
   std::cout << "\nPointer-based tree RMQ:" << std::endl;
   counter.output_counters(1, runs * n);
+
+  std::cout << "\nPointer-based inverted tree RMQ:" << std::endl;
+  counter.output_counters(2, runs * n);
   return 0;
 }
