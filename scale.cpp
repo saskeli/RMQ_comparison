@@ -49,7 +49,7 @@ int main(int argc, char const* argv[]) {
   size_t n = std::stoull(argv[1]);
   size_t seed = std::stoull(argv[2]);
 
-  count::Counters<3, count::Counter::instructions, count::Counter::L1D_miss, count::Counter::LL_miss>
+  count::Counters<true, 3, count::Counter::instructions, count::Counter::L1D_miss, count::Counter::LL_miss>
       counter;
 
   for (size_t size = 10; size <= n; size *= 2) {
