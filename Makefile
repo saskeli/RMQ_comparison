@@ -19,6 +19,9 @@ profile: profile.cpp $(HEADERS) counters/counters.hpp
 scale: scale.cpp $(HEADERS) counters/counters.hpp
 	g++ $(CFLAGS) -Ofast scale.cpp -o scale 
 
+timing_effects: timing_effects.cpp counters/counters.hpp $(HEADERS)
+	g++ $(CFLAGS) -Ofast timing_effects.cpp -o timing_effects
+
 benchmark/build/lib:
 	git submodule update --init
 
