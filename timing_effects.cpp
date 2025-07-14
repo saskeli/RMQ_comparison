@@ -47,41 +47,42 @@ uint64_t run(size_t n, size_t seed, size_t n_q) {
   }
   std::cout << "Separate queries: " << separate_queries << "\n"
             << "Pipeline flush: " << pipeline_flush << std::endl;
-  counter.output_counters(0);
+  counter.output_counters(0, runs * n_q);
   return checksum;
 }
 
 int main(int argc, char const* argv[]) {
-  /*if (argc < 6) {
-    std::cerr << "n, seed, query_count, separate_queries and pipeline_flush are
-  required." << std::endl; std::cerr << argv[0] << " <n> <seed> <query_count>
-  <0|1> <0|1>" << std::endl; exit(1);
-  }*/
+  if (argc < 6) {
+    std::cerr << "n, seed, query_count, separate_queries and pipeline_flush "
+                 "are required."
+              << std::endl;
+    std::cerr << argv[0] << " <n> <seed> <query_count><0|1> <0|1>" << std::endl;
+    exit(1);
+  }
   size_t n = std::stoull(argv[1]);
   size_t seed = std::stoull(argv[2]);
   size_t n_q = std::stoull(argv[3]);
-  /*bool separate_queries = std::stoull(argv[4]) % 2 == 1;
+  bool separate_queries = std::stoull(argv[4]) % 2 == 1;
   bool pipeline_flush = std::stoull(argv[5]) % 2 == 1;
 
   std::cout << "Running " << runs << " iterations of\n"
             << "\t" << n_q << " queries on\n"
             << "\t" << n << " element structures with seed\n"
             << "\t" << seed << std::endl;
-*/
   uint64_t c;
-  /*if (separate_queries) {
-    if (pipeline_flush) {*/
-  c = run<true, true>(n, seed, n_q);
-  /*} else {
-    c = run<true, false>(n, seed, n_q);
-  }
-} else {
-  if (pipeline_flush) {
-    c = run<false, true>(n, seed, n_q);
+  if (separate_queries) {
+    if (pipeline_flush) {
+      c = run<true, true>(n, seed, n_q);
+    } else {
+      c = run<true, false>(n, seed, n_q);
+    }
   } else {
-    c = run<false, false>(n, seed, n_q);
+    if (pipeline_flush) {
+      c = run<false, true>(n, seed, n_q);
+    } else {
+      c = run<false, false>(n, seed, n_q);
+    }
   }
-}*/
 
   std::cout << "Checksum " << c << std::endl;
 
