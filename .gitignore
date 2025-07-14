@@ -34,12 +34,14 @@ bench
 test/test
 profile
 scale
+timing_effects
 
 # Results related
 *.ssv
 *.ipynb
 .ipynb_checkpoints
 *.png
+*.pdf
 *.txt
 
 # env
