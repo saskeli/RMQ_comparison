@@ -22,6 +22,9 @@ scale: scale.cpp $(HEADERS) counters/counters.hpp
 timing_effects: timing_effects.cpp counters/counters.hpp $(HEADERS)
 	g++ $(CFLAGS) -Ofast timing_effects.cpp -o timing_effects
 
+array_timing: array_timing.cpp counters/counters.hpp
+	g++ $(CFLAGS) -Ofast array_timing.cpp -o array_timing
+
 benchmark/build/lib:
 	git submodule update --init
 
