@@ -1,6 +1,6 @@
 
 BENCH=-isystem benchmark/include -Lbenchmark/build/src -lbenchmark -lpthread
-CMAKE_OPT=-DBENCHMARK_DOWNLOAD_DEPENDENCIES=on -DCMAKE_BUILD_TYPE=Release
+CMAKE_OPT=-DCMAKE_BUILD_TYPE=Release -DBENCHMARK_ENABLE_TESTING=OFF -DBENCHMARK_ENABLE_GTEST_TESTS=OFF -DBENCHMARK_DOWNLOAD_DEPENDENCIES=OFF
 
 HEADERS=include/seg_rmq.hpp include/tree_rmq.hpp include/inverted_tree_tmq.hpp include/util.hpp
 
@@ -10,7 +10,7 @@ GFLAGS = -lpthread -DGTEST_ON -isystem googletest/googletest/include -pthread -L
 
 DEFAULT: bench
 
-bench: bench.cpp $(HEADERS) benchmark/build/lib/libgtest.a
+bench: bench.cpp $(HEADERS) benchmark/build/src/libbenchmark.a
 	g++ $(CFLAGS) -Ofast bench.cpp $(BENCH) -o bench
 
 profile: profile.cpp $(HEADERS) counters/counters.hpp
@@ -28,7 +28,7 @@ array_timing: array_timing.cpp counters/counters.hpp
 benchmark/build/lib:
 	git submodule update --init
 
-benchmark/build/lib/libgtest.a: | benchmark/build/lib
+benchmark/build/src/libbenchmark.a: | benchmark/include
 	mkdir -p benchmark/build
 	(cd benchmark; cmake $(CMAKE_OPT) -S . -B "build")
 	(cd benchmark; cmake --build "build" --config Release)

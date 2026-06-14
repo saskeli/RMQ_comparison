@@ -57,11 +57,13 @@ int main(int argc, char const* argv[]) {
             << "\t" << n << " element structures with seed\n"
             << "\t" << seed << std::endl;
 
-  count::Default<3> counter;
+  count::Counters<false, 3, count::Counter::instructions,
+                  count::Counter::L1D_miss, count::Counter::L1D_access,
+                  count::Counter::LL_miss> counter;
 
-  uint64_t a_c = run<Seq_RMQ, count::Default<3>, 0>(n, seed, counter, n_q);
-  uint64_t b_c = run<Tree_RMQ, count::Default<3>, 1>(n, seed, counter, n_q);
-  uint64_t c_c = run<Inv_Tree_RMQ, count::Default<3>, 2>(n, seed, counter, n_q);
+  uint64_t a_c = run<Seq_RMQ, decltype(counter), 0>(n, seed, counter, n_q);
+  uint64_t b_c = run<Tree_RMQ, decltype(counter), 1>(n, seed, counter, n_q);
+  uint64_t c_c = run<Inv_Tree_RMQ, decltype(counter), 2>(n, seed, counter, n_q);
   std::cout << "Checksums " << a_c << ", " << b_c << ", " << c_c << std::endl;
 
   std::cout << "\nSegment tree RMQ:" << std::endl;
