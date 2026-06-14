@@ -18,9 +18,8 @@ static void BM_STRMQ(benchmark::State& state) {
   uint64_t checksum = 0;
   for (auto _ : state) {
     state.PauseTiming();
-    uint64_t a = uniform_dist(gen) % vec.size();
-    uint64_t b = uniform_dist(gen) % (vec.size() - a);
-    b += a;
+    uint64_t a = uniform_dist(gen) % (vec.size() / 2);
+    uint64_t b = a + vec.size() / 2 + uniform_dist(gen) % (vec.size() / 2 - a);
     state.ResumeTiming();
     checksum += rmq.minimum(a, b);
   }
@@ -29,7 +28,7 @@ static void BM_STRMQ(benchmark::State& state) {
 }
 BENCHMARK(BM_STRMQ)
     ->RangeMultiplier(2)
-    ->Range(1 << 10, 1 << 27)
+    ->Range(10, 300000000)
     ->Complexity();
 
 static void BM_BinTreeRMQ(benchmark::State& state) {
@@ -44,9 +43,8 @@ static void BM_BinTreeRMQ(benchmark::State& state) {
   uint64_t checksum = 0;
   for (auto _ : state) {
     state.PauseTiming();
-    uint64_t a = uniform_dist(gen) % vec.size();
-    uint64_t b = uniform_dist(gen) % (vec.size() - a);
-    b += a;
+    uint64_t a = uniform_dist(gen) % (vec.size() / 2);
+    uint64_t b = a + vec.size() / 2 + uniform_dist(gen) % (vec.size() / 2 - a);
     state.ResumeTiming();
     checksum += rmq.minimum(a, b);
   }
@@ -55,7 +53,7 @@ static void BM_BinTreeRMQ(benchmark::State& state) {
 }
 BENCHMARK(BM_BinTreeRMQ)
     ->RangeMultiplier(2)
-    ->Range(1 << 10, 1 << 24)
+    ->Range(10, 300000000)
     ->Complexity();
 
 static void BM_InvTreeRMQ(benchmark::State& state) {
@@ -70,9 +68,8 @@ static void BM_InvTreeRMQ(benchmark::State& state) {
   uint64_t checksum = 0;
   for (auto _ : state) {
     state.PauseTiming();
-    uint64_t a = uniform_dist(gen) % vec.size();
-    uint64_t b = uniform_dist(gen) % (vec.size() - a);
-    b += a;
+    uint64_t a = uniform_dist(gen) % (vec.size() / 2);
+    uint64_t b = a + vec.size() / 2 + uniform_dist(gen) % (vec.size() / 2 - a);
     state.ResumeTiming();
     checksum += rmq.minimum(a, b);
   }
@@ -81,7 +78,7 @@ static void BM_InvTreeRMQ(benchmark::State& state) {
 }
 BENCHMARK(BM_InvTreeRMQ)
     ->RangeMultiplier(2)
-    ->Range(1 << 10, 1 << 24)
+    ->Range(10, 300000000)
     ->Complexity();
 
 BENCHMARK_MAIN();

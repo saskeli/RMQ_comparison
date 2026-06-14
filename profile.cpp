@@ -24,8 +24,8 @@ uint64_t run(size_t n, size_t seed, counter_T& counter, size_t n_q) {
       vec[i] = uniform_dist(gen);
     }
     for (size_t i = 0; i < n_q; ++i) {
-      uint64_t a_q = uniform_dist(gen) % n;
-      uint64_t b_q = a_q + uniform_dist(gen) % (n - a_q);
+      uint64_t a_q = uniform_dist(gen) % (n / 2);
+      uint64_t b_q = a_q + n / 2 + uniform_dist(gen) % (n / 2 - a_q);
       a[i] = a_q;
       b[i] = b_q;
     }
