@@ -28,10 +28,10 @@ static void BM_STRMQ(benchmark::State& state) {
 }
 BENCHMARK(BM_STRMQ)
     ->RangeMultiplier(2)
-    ->Range(10, 300000000)
+    ->Range(10, 3000000000)
     ->Complexity();
 
-static void BM_BinTreeRMQ(benchmark::State& state) {
+/*static void BM_BinTreeRMQ(benchmark::State& state) {
   std::vector<uint64_t> vec(state.range(0));
   std::random_device r;
   std::mt19937 gen(r());
@@ -54,7 +54,7 @@ static void BM_BinTreeRMQ(benchmark::State& state) {
 BENCHMARK(BM_BinTreeRMQ)
     ->RangeMultiplier(2)
     ->Range(10, 300000000)
-    ->Complexity();
+    ->Complexity();*/
 
 static void BM_InvTreeRMQ(benchmark::State& state) {
   std::vector<uint64_t> vec(state.range(0));
@@ -78,7 +78,7 @@ static void BM_InvTreeRMQ(benchmark::State& state) {
 }
 BENCHMARK(BM_InvTreeRMQ)
     ->RangeMultiplier(2)
-    ->Range(10, 300000000)
+    ->Range(10, 3000000000) // ~200GB of memory
     ->Complexity();
 
 BENCHMARK_MAIN();

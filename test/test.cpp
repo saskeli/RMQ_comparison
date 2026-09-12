@@ -68,6 +68,16 @@ TEST(SegRMQ, test) {
   }
 }
 
+TEST(SegRMQ, bug1) {
+  std::vector<uint64_t> vec = {2, 4, 5, 3, 8, 6, 7, 1};
+  Seq_RMQ rmq(vec);
+  for (size_t a = 0; a < vec.size(); ++a) {
+    for (size_t b = a; b < vec.size(); ++b) {
+      ASSERT_EQ(bf(vec, a, b), rmq.minimum(a, b)) << a << ", " << b;
+    }
+  }
+}
+
 TEST(TreeRMQ, test) {
   std::vector<uint64_t> vec = {1, 5, 2, 6, 5};
   Tree_RMQ rmq(vec);
@@ -85,6 +95,16 @@ TEST(TreeRMQ, test) {
   }
 }
 
+TEST(TreeRMQ, bug1) {
+  std::vector<uint64_t> vec = {2, 4, 5, 3, 8, 6, 7, 1};
+  Tree_RMQ rmq(vec);
+  for (size_t a = 0; a < vec.size(); ++a) {
+    for (size_t b = a; b < vec.size(); ++b) {
+      ASSERT_EQ(bf(vec, a, b), rmq.minimum(a, b)) << a << ", " << b;
+    }
+  }
+}
+
 TEST(InvTreeRMQ, test) {
   std::vector<uint64_t> vec = {1, 5, 2, 6, 5};
   Inv_Tree_RMQ rmq(vec);
@@ -95,6 +115,16 @@ TEST(InvTreeRMQ, test) {
   }
   rmq.set(2, 4);
   vec[2] = 4;
+  for (size_t a = 0; a < vec.size(); ++a) {
+    for (size_t b = a; b < vec.size(); ++b) {
+      ASSERT_EQ(bf(vec, a, b), rmq.minimum(a, b)) << a << ", " << b;
+    }
+  }
+}
+
+TEST(InvTreeRMQ, bug1) {
+  std::vector<uint64_t> vec = {2, 4, 5, 3, 8, 6, 7, 1};
+  Inv_Tree_RMQ rmq(vec);
   for (size_t a = 0; a < vec.size(); ++a) {
     for (size_t b = a; b < vec.size(); ++b) {
       ASSERT_EQ(bf(vec, a, b), rmq.minimum(a, b)) << a << ", " << b;
